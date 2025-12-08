@@ -223,13 +223,126 @@ docker exec -it gym_db psql -U postgres -d gym_management
 - Monthly billing with no-show penalties
 - Recent booking history
 
-## Contributing
+## Git Workflow & Conventions
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+### Branch Strategy
+
+**Branches principales :**
+- `main` - Production-ready code, protected
+- `develop` - Integration branch for features
+
+**Branches de feature :**
+- Format: `feature/<nom-de-la-fonctionnalite>`
+- Exemple: `feature/user-authentication`, `feature/booking-system`
+
+**Règles de protection :**
+- ❌ Pas de commit direct sur `main` ou `develop`
+- ✅ Pull Request obligatoire vers `develop`
+- ✅ Status checks requis avant merge
+- ✅ Review requise (optionnel mais recommandé)
+
+### Convention de Commit
+
+Ce projet utilise [Conventional Commits](https://www.conventionalcommits.org/) avec **commitlint**.
+
+**Format obligatoire :**
+```
+<type>: <description>
+
+[corps optionnel]
+
+[footer optionnel]
+```
+
+**Types acceptés :**
+- `feat:` - Nouvelle fonctionnalité
+- `fix:` - Correction de bug
+- `chore:` - Tâches de maintenance (dépendances, config, etc.)
+- `docs:` - Documentation
+- `style:` - Formatage du code (sans changement de logique)
+- `refactor:` - Refactorisation du code
+- `perf:` - Amélioration des performances
+- `test:` - Ajout ou modification de tests
+- `build:` - Changements du système de build
+- `ci:` - Changements de configuration CI/CD
+- `revert:` - Annulation d'un commit précédent
+
+**Exemples valides :**
+```bash
+feat: ajout de l'authentification utilisateur
+fix: correction de la connexion Postgres
+chore: mise à jour des dépendances NestJS
+docs: mise à jour du README avec les règles Git
+style: formatage du code frontend avec ESLint
+refactor: réorganisation de la structure des services
+perf: optimisation des requêtes database
+test: ajout des tests unitaires pour UserService
+ci: configuration du workflow GitHub Actions
+```
+
+**Exemples invalides :**
+```bash
+❌ ajout feature (pas de type)
+❌ feat : ajout feature (espace avant :)
+❌ FEAT: ajout feature (majuscule)
+❌ lol: test (type non reconnu)
+```
+
+### Hooks Git (Husky)
+
+**`pre-commit`** - Exécuté avant chaque commit
+- ✅ Lint frontend (ESLint)
+- ✅ Lint backend (si configuré)
+- Bloque le commit en cas d'erreur de lint
+
+**`commit-msg`** - Exécuté lors de la création du message de commit
+- ✅ Validation du format Conventional Commits
+- ✅ Vérifie le type, la description
+- Bloque le commit si le format est invalide
+
+### Workflow de Contribution
+
+1. **Créer une branche de feature**
+   ```bash
+   git checkout develop
+   git pull origin develop
+   git checkout -b feature/ma-nouvelle-feature
+   ```
+
+2. **Développer et commiter**
+   ```bash
+   # Les hooks pre-commit et commit-msg s'exécutent automatiquement
+   git add .
+   git commit -m "feat: ajout de la nouvelle fonctionnalité"
+   ```
+
+3. **Pousser et créer une Pull Request**
+   ```bash
+   git push origin feature/ma-nouvelle-feature
+   ```
+   - Créer une PR vers `develop` sur GitHub
+   - Les status checks CI s'exécutent automatiquement
+   - Attendre l'approbation et le passage des checks
+
+4. **Merge vers develop**
+   - Une fois approuvée et les checks validés
+   - Utiliser "Squash and merge" ou "Merge commit"
+   - Supprimer la branche de feature
+
+5. **Release vers main**
+   - Créer une PR de `develop` vers `main`
+   - Tests et validations finales
+   - Merge uniquement quand prêt pour la production
+
+### CI/CD Pipeline
+
+**GitHub Actions workflows :**
+- ✅ **Lint Frontend** - Vérifie le code avec ESLint
+- ✅ **Validate Commit Messages** - Vérifie les commits de la PR
+
+**Status checks requis :**
+- `Lint Frontend` doit passer avant merge
+- Branch doit être à jour avec la branche cible
 
 ## License
 

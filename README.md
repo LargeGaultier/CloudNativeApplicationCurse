@@ -1,3 +1,29 @@
+# README.md du Projet
+
+Ce TP documente les règles Git, la convention de commit et les hooks activés dans ce dépôt.
+
+## ✔ Règles Git utilisées
+
+- Branches principales : `main`, `develop`
+- Branches de feature : `feature/<nom>` (ex. `feature/init-husky`)
+- PR obligatoire vers `develop`
+- Pas de commit direct sur `main` ou `develop`
+
+## ✔ Convention de commit
+
+Exemples :
+
+- `feat: ajout de l’authentification`
+- `fix: correction de la connexion Postgres`
+- `chore: mise à jour des dépendances NestJS`
+
+## ✔ Hooks actifs
+
+- `pre-commit` : lint front + back
+- `commit-msg` : vérification commitlint
+
+---
+
 # Gym Management System
 
 A complete fullstack gym management application built with modern web technologies.
@@ -5,12 +31,14 @@ A complete fullstack gym management application built with modern web technologi
 ## Features
 
 ### User Features
+
 - **User Dashboard**: View stats, billing, and recent bookings
 - **Class Booking**: Book and cancel fitness classes
 - **Subscription Management**: View subscription details and billing
 - **Profile Management**: Update personal information
 
 ### Admin Features
+
 - **Admin Dashboard**: Overview of gym statistics and revenue
 - **User Management**: CRUD operations for users
 - **Class Management**: Create, update, and delete fitness classes
@@ -18,6 +46,7 @@ A complete fullstack gym management application built with modern web technologi
 - **Subscription Management**: Manage user subscriptions
 
 ### Business Logic
+
 - **Capacity Management**: Classes have maximum capacity limits
 - **Time Conflict Prevention**: Users cannot book overlapping classes
 - **Cancellation Policy**: 2-hour cancellation policy (late cancellations become no-shows)
@@ -27,18 +56,21 @@ A complete fullstack gym management application built with modern web technologi
 ## Tech Stack
 
 ### Backend
+
 - **Node.js** with Express.js
 - **Prisma** ORM with PostgreSQL
 - **RESTful API** with proper error handling
 - **MVC Architecture** with repositories pattern
 
 ### Frontend
+
 - **Vue.js 3** with Composition API
 - **Pinia** for state management
 - **Vue Router** with navigation guards
 - **Responsive CSS** styling
 
 ### DevOps
+
 - **Docker** containerization
 - **Docker Compose** for orchestration
 - **PostgreSQL** database
@@ -47,25 +79,29 @@ A complete fullstack gym management application built with modern web technologi
 ## Quick Start
 
 ### Prerequisites
+
 - Docker and Docker Compose
 - Git
 
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd gym-management-system
    ```
 
 2. **Set up environment variables**
+
    ```bash
    cp .env.example .env
    ```
-   
+
    Edit `.env` file if needed (default values should work for development).
 
 3. **Start the application**
+
    ```bash
    docker-compose up --build
    ```
@@ -80,13 +116,15 @@ A complete fullstack gym management application built with modern web technologi
 The application comes with seeded test data:
 
 **Admin User:**
+
 - Email: admin@gym.com
 - Password: admin123
 - Role: ADMIN
 
 **Regular Users:**
+
 - Email: john.doe@email.com
-- Email: jane.smith@email.com  
+- Email: jane.smith@email.com
 - Email: mike.wilson@email.com
 - Password: password123 (for all users)
 
@@ -117,9 +155,11 @@ gym-management-system/
 ## API Endpoints
 
 ### Authentication
+
 - `POST /api/auth/login` - User login
 
 ### Users
+
 - `GET /api/users` - Get all users
 - `GET /api/users/:id` - Get user by ID
 - `POST /api/users` - Create user
@@ -127,6 +167,7 @@ gym-management-system/
 - `DELETE /api/users/:id` - Delete user
 
 ### Classes
+
 - `GET /api/classes` - Get all classes
 - `GET /api/classes/:id` - Get class by ID
 - `POST /api/classes` - Create class
@@ -134,6 +175,7 @@ gym-management-system/
 - `DELETE /api/classes/:id` - Delete class
 
 ### Bookings
+
 - `GET /api/bookings` - Get all bookings
 - `GET /api/bookings/user/:userId` - Get user bookings
 - `POST /api/bookings` - Create booking
@@ -141,12 +183,14 @@ gym-management-system/
 - `DELETE /api/bookings/:id` - Delete booking
 
 ### Subscriptions
+
 - `GET /api/subscriptions` - Get all subscriptions
 - `GET /api/subscriptions/user/:userId` - Get user subscription
 - `POST /api/subscriptions` - Create subscription
 - `PUT /api/subscriptions/:id` - Update subscription
 
 ### Dashboard
+
 - `GET /api/dashboard/user/:userId` - Get user dashboard
 - `GET /api/dashboard/admin` - Get admin dashboard
 
@@ -155,6 +199,7 @@ gym-management-system/
 ### Local Development Setup
 
 1. **Backend Development**
+
    ```bash
    cd backend
    npm install
@@ -162,6 +207,7 @@ gym-management-system/
    ```
 
 2. **Frontend Development**
+
    ```bash
    cd frontend
    npm install
@@ -201,23 +247,27 @@ docker exec -it gym_db psql -U postgres -d gym_management
 ## Features in Detail
 
 ### Subscription System
+
 - **STANDARD**: €30/month, €5 per no-show
-- **PREMIUM**: €50/month, €3 per no-show  
+- **PREMIUM**: €50/month, €3 per no-show
 - **ETUDIANT**: €20/month, €7 per no-show
 
 ### Booking Rules
+
 - Users can only book future classes
 - Maximum capacity per class is enforced
 - No double-booking at the same time slot
 - 2-hour cancellation policy
 
 ### Admin Dashboard
+
 - Total users and active subscriptions
 - Booking statistics (confirmed, no-show, cancelled)
 - Monthly revenue calculations
 - User management tools
 
 ### User Dashboard
+
 - Personal statistics and activity
 - Current subscription details
 - Monthly billing with no-show penalties

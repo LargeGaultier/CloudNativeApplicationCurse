@@ -12,11 +12,7 @@
     "lint:all": "npm run lint:front && npm run lint:back"
   },
   "lint-staged": {
-    "frontend/**/*.{js,vue}": [
-      "cd frontend && eslint --fix --quiet || true"
-    ],
-    "backend/**/*.js": [
-      "cd backend && eslint --fix --quiet || true"
-    ]
+    "frontend/**/*.{js,vue}": ["npx eslint --config frontend/eslint.config.js --fix"],
+    "backend/**/*.js": ["npx eslint --config backend/eslint.config.js --fix"]
   }
 }

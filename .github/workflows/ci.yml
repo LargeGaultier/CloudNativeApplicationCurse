@@ -1,1 +1,53 @@
 
+name: CI Pipeline
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  lint:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm install
+      - name: Run lint
+        run: npm run lint
+
+  build:
+    runs-on: self-hosted
+    needs: lint
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm install
+      - name: Build frontend and backend
+        run: npm run build
+
+  test:
+    runs-on: self-hosted
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install backend dependencies
+        run: npm install
+      - name: Run backend tests
+        run: npm test
+
+  sonarcloud:
+    runs-on: self-hosted
+    needs: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install backend dependencies
+        run: cd backend && npm install
+      - name: Run SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@v6.0.0
+        with:
+          args: >
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.projectKey=mathyscxsl_CloudNativeApplicationCurse
+            -Dsonar.organization=mathyscxsl
+            -Dsonar.sources=backend/src

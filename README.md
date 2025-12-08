@@ -1,6 +1,11 @@
 # README.md du Projet
 
-Ce TP documente les règles Git, la convention de commit et les hooks activés dans ce dépôt.
+[![CI](https://github.com/<TON_ORG>/<TON_REPO>/actions/workflows/ci.yml/badge.svg)](https://github.com/mathyscxsl/CloudNativeApplicationCurse/actions/workflows/ci.yml)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=mathyscxsl_CloudNativeApplicationCurse&metric=alert_status)](https://sonarcloud.io/dashboard?id=mathyscxsl_CloudNativeApplicationCurse)
+
+---
+
+Ce TP documente les règles Git, la convention de commit, les hooks activés dans ce dépôt, et présente l’application Gym Management System.
 
 ## ✔ Règles Git utilisées
 
@@ -21,6 +26,28 @@ Exemples :
 
 - `pre-commit` : lint front + back
 - `commit-msg` : vérification commitlint
+
+---
+
+## Git & Workflow Rules (TP1 + TP2)
+
+- Branch protection active :
+  - PR obligatoire vers `develop`
+  - CI doit être verte
+  - Quality Gate SonarCloud doit passer
+  - Push direct interdit sur `main` et `develop`
+- Commits doivent suivre la convention Commitlint
+- Husky pre-commit lint front & back
+
+---
+
+## CI/CD Pipeline
+
+````mermaid
+flowchart TD
+    Lint --> Build
+    Build --> Test
+    Test --> SonarCloud
 
 ---
 
@@ -90,7 +117,7 @@ A complete fullstack gym management application built with modern web technologi
    ```bash
    git clone <repository-url>
    cd gym-management-system
-   ```
+````
 
 2. **Set up environment variables**
 

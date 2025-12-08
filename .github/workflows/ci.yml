@@ -103,6 +103,9 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         with:
           projectBaseDir: ./backend
+          args: >
+            -Dsonar.projectKey=Nazaro73_CloudNativeApplicationCurse
+            -Dsonar.organization=nazaro73
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

@@ -47,7 +47,7 @@ jobs:
         run: cd backend && npm install
 
       - name: Run SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v6.0.0
+        uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602
         with:
           args: >
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
@@ -60,6 +60,6 @@ jobs:
             -Dsonar.pullrequest.base=${{ github.base_ref || 'develop' }}
 
       - name: SonarCloud Quality Gate check
-        uses: sonarsource/sonarqube-quality-gate-action@v1.2.0
+        uses: sonarsource/sonarqube-quality-gate-action@cf038b0e0cdecfa9e56c198bbb7d21d751d62c3b
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

@@ -37,12 +37,15 @@ jobs:
         run: npm test
 
   sonarcloud:
+    name: SonarCloud Scan & Quality Gate
     runs-on: self-hosted
     needs: test
     steps:
       - uses: actions/checkout@v3
-      - name: Install backend dependencies
+
+      - name: Install Backend Dependencies
         run: cd backend && npm install
+
       - name: Run SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v6.0.0
         with:
@@ -51,3 +54,12 @@ jobs:
             -Dsonar.projectKey=mathyscxsl_CloudNativeApplicationCurse
             -Dsonar.organization=mathyscxsl
             -Dsonar.sources=backend/src
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.pullrequest.key=${{ github.event.pull_request.number || github.ref }}
+            -Dsonar.pullrequest.branch=${{ github.head_ref || github.ref }}
+            -Dsonar.pullrequest.base=${{ github.base_ref || 'develop' }}
+
+      - name: SonarCloud Quality Gate check
+        uses: sonarsource/sonarqube-quality-gate-action@v1.2.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

@@ -44,11 +44,71 @@ A complete fullstack gym management application built with modern web technologi
 - **PostgreSQL** database
 - **Nginx** for frontend serving
 
+## Git Workflow
+
+### Branch Strategy
+
+- **Main branches**:
+  - `main` - Production-ready code
+  - `develop` - Integration branch for features
+
+- **Feature branches**: `feature/<nom>`
+  - Created from `develop`
+  - Merged back to `develop` via Pull Request
+
+### Git Rules
+
+- ❌ **No direct commits** on `main` or `develop`
+- ✅ **Pull Request required** to merge into `develop`
+- ✅ All feature work must be done in `feature/*` branches
+
+### Commit Convention
+
+This project follows **Conventional Commits** specification:
+
+**Format**: `<type>: <description>`
+
+**Types**:
+- `feat`: New feature
+- `fix`: Bug fix
+- `chore`: Maintenance tasks (dependencies, config)
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting, missing semi-colons, etc.)
+- `refactor`: Code refactoring
+- `test`: Adding or updating tests
+- `perf`: Performance improvements
+
+**Examples**:
+```bash
+feat: ajout de l'authentification
+fix: correction de la connexion Postgres
+chore: mise à jour des dépendances NestJS
+docs: mise à jour du README avec les règles Git
+```
+
+### Active Git Hooks
+
+This project uses **Husky** for Git hooks automation:
+
+- **`pre-commit`**: Runs linting on frontend and backend code
+  - Validates code quality before committing
+  - Ensures consistent code style
+  
+- **`commit-msg`**: Validates commit message format
+  - Enforces Conventional Commits specification
+  - Prevents commits with invalid messages
+
+**Installation**:
+```bash
+npm install  # Installs husky hooks automatically
+```
+
 ## Quick Start
 
 ### Prerequisites
 - Docker and Docker Compose
 - Git
+- Node.js (for local development)
 
 ### Installation
 
@@ -238,3 +298,4 @@ This project is licensed under the MIT License.
 ## Support
 
 For support or questions, please open an issue in the repository.
+

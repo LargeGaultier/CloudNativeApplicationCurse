@@ -1,5 +1,7 @@
 # Gym Management System
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=SabSab93_CloudNativeApplicationCurse&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=SabSab93_CloudNativeApplicationCurse)
+
 A complete fullstack gym management application built with modern web technologies.
 
 ## Features
@@ -315,3 +317,4 @@ This workflow provides:
 - Enforced quality standards
 - Safe collaboration practices
 - A production-ready foundation for CI/CD
+

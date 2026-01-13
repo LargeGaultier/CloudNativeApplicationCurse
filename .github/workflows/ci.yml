@@ -107,20 +107,27 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@v2.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR }}
         with:
           projectBaseDir: backend
 
       - name: Check SonarCloud Quality Gate
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR }}
         run: |
-          QUALITY_GATE=$(curl -s -u ${{ secrets.SONAR_TOKEN }}: \
-            "https://sonarcloud.io/api/qualitygates/project_status?projectKey=${{ github.repository }}" \
+          # Wait for SonarCloud analysis to complete
+          sleep 10
+
+          # Get project key from repository
+          PROJECT_KEY="${{ github.repository }}"
+
+          # Check Quality Gate status
+          QUALITY_GATE=$(curl -s -u ${{ secrets.SONAR }}: \
+            "https://sonarcloud.io/api/qualitygates/project_status?projectKey=${PROJECT_KEY}" \
             | jq -r '.projectStatus.status')
 
           if [ "$QUALITY_GATE" != "OK" ]; then
-            echo "Quality Gate failed: $QUALITY_GATE"
+            echo "❌ Quality Gate failed: $QUALITY_GATE"
             exit 1
           fi
-          echo "Quality Gate passed"
+          echo "✅ Quality Gate passed"

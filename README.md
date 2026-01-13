@@ -1,5 +1,9 @@
 # Gym Management System
 
+[![CI Pipeline](https://github.com/Mahkalix/CloudNativeApplicationCurse/actions/workflows/ci.yml/badge.svg)](https://github.com/Mahkalix/CloudNativeApplicationCurse/actions)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Mahkalix_CloudNativeApplicationCurse&metric=alert_status)](https://sonarcloud.io/summary/overall_health?id=Mahkalix_CloudNativeApplicationCurse)
+[![Code Coverage](https://sonarcloud.io/api/project_badges/measure?project=Mahkalix_CloudNativeApplicationCurse&metric=coverage)](https://sonarcloud.io/summary/overall_health?id=Mahkalix_CloudNativeApplicationCurse)
+
 A complete fullstack gym management application built with modern web technologies.
 
 ## Features

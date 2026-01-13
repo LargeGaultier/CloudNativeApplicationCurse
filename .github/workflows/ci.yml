@@ -1,0 +1,128 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install frontend deps
+        run: npm install
+        working-directory: frontend
+
+      - name: Install backend deps
+        run: npm install
+        working-directory: backend
+
+      - name: Lint frontend
+        run: npm run lint
+        working-directory: frontend
+
+      - name: Lint backend
+        run: npm run lint
+        working-directory: backend
+
+  build:
+    name: Build
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install frontend deps
+        run: npm install
+        working-directory: frontend
+
+      - name: Install backend deps
+        run: npm install
+        working-directory: backend
+
+      - name: Build frontend
+        run: npm run build
+        working-directory: frontend
+
+      - name: Build backend
+        run: node -c src/index.js
+        working-directory: backend
+
+  tests:
+    name: Tests
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install backend deps
+        run: npm install
+        working-directory: backend
+
+      - name: Run backend tests
+        run: npm test
+        working-directory: backend
+
+  sonarcloud:
+    name: SonarCloud
+    runs-on: self-hosted
+    needs:
+      - lint
+      - build
+      - tests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Check SonarCloud token presence
+        run: |
+          if [ -n "${SONAR_TOKEN}" ]; then
+            echo "SONAR_TOKEN is set"
+          else
+            echo "SONAR_TOKEN is missing"
+            exit 1
+          fi
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Install backend deps
+        run: npm install
+        working-directory: backend
+
+      - name: SonarCloud scan (backend)
+        run: >
+          npx sonar-scanner
+          -Dsonar.projectKey=mathisBa_CloudNativeApplicationCurse
+          -Dsonar.organization=mathisba
+          -Dsonar.sources=backend/src
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}

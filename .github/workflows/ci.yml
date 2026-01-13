@@ -118,7 +118,8 @@ jobs:
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.sources=src \
             -Dsonar.qualitygate.wait=true \
-            -Dsonar.qualitygate.timeout=300
+            -Dsonar.qualitygate.timeout=300 \
+            -X
         working-directory: backend
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

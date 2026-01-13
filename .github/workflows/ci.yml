@@ -22,11 +22,11 @@ jobs:
           node-version: "20"
 
       - name: Install frontend deps
-        run: npm ci
+        run: npm install
         working-directory: frontend
 
       - name: Install backend deps
-        run: npm ci
+        run: npm install
         working-directory: backend
 
       - name: Lint frontend
@@ -50,11 +50,11 @@ jobs:
           node-version: "20"
 
       - name: Install frontend deps
-        run: npm ci
+        run: npm install
         working-directory: frontend
 
       - name: Install backend deps
-        run: npm ci
+        run: npm install
         working-directory: backend
 
       - name: Build frontend
@@ -78,7 +78,7 @@ jobs:
           node-version: "20"
 
       - name: Install backend deps
-        run: npm ci
+        run: npm install
         working-directory: backend
 
       - name: Run backend tests

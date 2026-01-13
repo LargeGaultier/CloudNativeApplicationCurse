@@ -238,3 +238,77 @@ This project is licensed under the MIT License.
 ## Support
 
 For support or questions, please open an issue in the repository.
+
+
+## Development Workflow & Code Quality
+
+This project follows a **Git workflow** designed to ensure code quality, consistency, and scalability in a collaborative environment.
+
+### Git Branching Strategy
+
+- **main**: production-ready code  
+- **develop**: integration branch  
+- **feature/<name>**: feature-specific branches  
+
+All changes are merged into `develop` via Pull Requests.  
+Direct pushes to `main` and `develop` are restricted through branch protection rules.
+
+
+
+### Commit Quality Enforcement
+
+The project enforces the **Conventional Commits** specification using **Commitlint**.
+
+**Commit format:**
+```
+<type>: <description>
+```
+
+**Allowed types:**
+- feat
+- fix
+- chore
+- docs
+- refactor
+- test
+
+Example:
+```
+chore: setup husky and commitlint
+```
+
+
+### Automated Git Hooks with Husky
+
+Husky is used to run automated checks before commits are created.
+
+**Pre-commit hook**
+```
+npm run lint:all
+```
+
+Scripts executed at the repository root:
+```
+lint:front → cd frontend && npm run lint
+lint:back  → cd backend && npm run lint
+lint:all   → npm run lint:front && npm run lint:back
+```
+
+This ensures consistent code quality across frontend and backend.
+
+### CI/CD Readiness
+
+The current workflow prepares the project for future automation:
+- GitHub Actions integration
+- Automated linting and testing
+- Container-based deployment pipelines
+- Scalable DevOps practices
+
+
+### Summary
+
+This workflow provides:
+- Clean and consistent commit history
+- Enforced quality standards
+- Safe collaboration practices
+- A production-ready foundation for CI/CD

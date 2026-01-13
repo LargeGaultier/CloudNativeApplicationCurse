@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+
+cd frontend
+npm run build
+
+cd ../backend
+npm run build

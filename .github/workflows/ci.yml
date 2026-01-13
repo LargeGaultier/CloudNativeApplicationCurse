@@ -124,8 +124,8 @@ jobs:
       - name: SonarCloud scan (backend)
         run: |
           sonar-scanner \
-            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
-            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
+            -Dsonar.projectKey=mathisBa_CloudNativeApplicationCurse \
+            -Dsonar.organization=mathisba \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.sources=src \
             -Dsonar.qualitygate.wait=true \

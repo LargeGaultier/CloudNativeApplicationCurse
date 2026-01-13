@@ -130,6 +130,7 @@ jobs:
             -Dsonar.sources=src \
             -Dsonar.qualitygate.wait=true \
             -Dsonar.qualitygate.timeout=300 \
+            -Dsonar.login=${SONAR_TOKEN} \
             -X
         working-directory: backend
         env:

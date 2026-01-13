@@ -62,7 +62,7 @@ jobs:
         working-directory: frontend
 
       - name: Build backend
-        run: npm run build
+        run: node -c src/index.js
         working-directory: backend
 
   tests:

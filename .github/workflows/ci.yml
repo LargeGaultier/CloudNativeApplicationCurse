@@ -110,6 +110,17 @@ jobs:
           unzip -q sonar-scanner.zip
           echo "$PWD/sonar-scanner-5.0.1.3006-macosx/bin" >> "$GITHUB_PATH"
 
+      - name: Check SonarCloud token presence
+        run: |
+          if [ -n "${SONAR_TOKEN}" ]; then
+            echo "SONAR_TOKEN is set"
+          else
+            echo "SONAR_TOKEN is missing"
+            exit 1
+          fi
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
       - name: SonarCloud scan (backend)
         run: |
           sonar-scanner \

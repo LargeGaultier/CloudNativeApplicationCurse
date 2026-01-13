@@ -28,6 +28,11 @@ app.use('/api/bookings', bookingRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/auth', authRoutes);
 
+// Echo endpoint (utility)
+app.post('/api/echo', (req, res) => {
+  res.json({ echo: req.body || null });
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });

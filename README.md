@@ -2,6 +2,16 @@
 
 A complete fullstack gym management application built with modern web technologies.
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mathisBa_CloudNativeApplicationCurse&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=mathisBa_CloudNativeApplicationCurse)
+
+### ✔ Badge CI
+
+### ✔ Badge SonarCloud
+
+### ✔ Schéma simple du pipeline
+
+### ✔ Règles du workflow Git (TP1 + TP2)
+
 ## Features
 
 ### User Features

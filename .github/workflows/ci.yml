@@ -98,17 +98,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          distribution: "temurin"
-          java-version: "17"
-
-      - name: Install SonarScanner CLI
-        run: |
-          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-macosx.zip
-          unzip -q sonar-scanner.zip
-          echo "$PWD/sonar-scanner-5.0.1.3006-macosx/bin" >> "$GITHUB_PATH"
+          node-version: "20"
 
       - name: Check SonarCloud token presence
         run: |
@@ -121,17 +114,19 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: SonarCloud scan (backend)
-        run: |
-          sonar-scanner \
-            -Dsonar.projectKey=mathisBa_CloudNativeApplicationCurse \
-            -Dsonar.organization=mathisba \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.sources=src \
-            -Dsonar.qualitygate.wait=true \
-            -Dsonar.qualitygate.timeout=300 \
-            -Dsonar.token=${SONAR_TOKEN} \
-            -X
+      - name: Install backend deps
+        run: npm install
         working-directory: backend
+
+      - name: SonarCloud scan (backend)
+        run: >
+          npx sonar-scanner
+          -Dsonar.projectKey=mathisBa_CloudNativeApplicationCurse
+          -Dsonar.organization=mathisba
+          -Dsonar.sources=backend/src
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          -Dsonar.qualitygate.wait=true
+          -Dsonar.qualitygate.timeout=300
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

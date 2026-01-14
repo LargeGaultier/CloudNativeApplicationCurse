@@ -43,11 +43,15 @@ else
 fi
 
 cat > "${ACTIVE_UPSTREAM}" <<EOF
+resolver 127.0.0.11 valid=10s;
+
 upstream backend_active {
+    zone backend_active 64k;
     server backend-${TARGET_COLOR}:3000 resolve;
 }
 
 upstream frontend_active {
+    zone frontend_active 64k;
     server frontend-${TARGET_COLOR}:80 resolve;
 }
 EOF
@@ -64,11 +68,15 @@ for i in 1 2 3 4 5; do
     echo "Backend healthcheck failed, rolling back."
     if [ "${CURRENT_COLOR}" != "none" ]; then
       cat > "${ACTIVE_UPSTREAM}" <<EOF
+resolver 127.0.0.11 valid=10s;
+
 upstream backend_active {
+    zone backend_active 64k;
     server backend-${CURRENT_COLOR}:3000 resolve;
 }
 
 upstream frontend_active {
+    zone frontend_active 64k;
     server frontend-${CURRENT_COLOR}:80 resolve;
 }
 EOF
@@ -89,11 +97,15 @@ for i in 1 2 3 4 5; do
     echo "Frontend check failed, rolling back."
     if [ "${CURRENT_COLOR}" != "none" ]; then
       cat > "${ACTIVE_UPSTREAM}" <<EOF
+resolver 127.0.0.11 valid=10s;
+
 upstream backend_active {
+    zone backend_active 64k;
     server backend-${CURRENT_COLOR}:3000 resolve;
 }
 
 upstream frontend_active {
+    zone frontend_active 64k;
     server frontend-${CURRENT_COLOR}:80 resolve;
 }
 EOF

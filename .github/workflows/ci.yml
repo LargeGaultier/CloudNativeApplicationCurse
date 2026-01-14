@@ -203,31 +203,16 @@ jobs:
           OWNER_LC=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "$OWNER_LC" --password-stdin
 
-      - name: Stop current containers (keep volumes)
-        run: docker compose down || true
-
-      - name: Pull latest images for this commit
+      - name: Deploy via script (idempotent)
         env:
-          IMAGE_TAG: ${{ github.sha }}
+          # variables attendues par scripts/deploy.sh
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
-          OWNER_LC=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
-          docker pull ghcr.io/$OWNER_LC/cloudnative-backend:${IMAGE_TAG}
-          docker pull ghcr.io/$OWNER_LC/cloudnative-frontend:${IMAGE_TAG}
-
-      # ✅ obligatoire si docker-compose.yml utilise backend/.env
-      - name: Create backend .env for compose
-        run: |
-          cat > backend/.env <<EOF
-          POSTGRES_USER=${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DB=${{ secrets.POSTGRES_DB }}
-          DATABASE_URL=${{ secrets.DATABASE_URL }}
-          EOF
-
-      - name: Start environment
-        env:
-          IMAGE_TAG: ${{ github.sha }}
-        run: docker compose up -d
+          chmod +x scripts/deploy.sh
+          bash scripts/deploy.sh
 
       - name: Cleanup deploy
         if: always()

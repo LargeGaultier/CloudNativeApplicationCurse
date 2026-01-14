@@ -16,6 +16,7 @@ services:
       - app-network
 
   backend:
+    image: ${IMAGE_BACKEND:-cloudnativeapplicationcurse-backend:latest}
     build:
       context: ./backend
     environment:
@@ -31,6 +32,7 @@ services:
       - app-network
 
   frontend:
+    image: ${IMAGE_FRONTEND:-cloudnativeapplicationcurse-frontend:latest}
     build:
       context: ./frontend
       args:

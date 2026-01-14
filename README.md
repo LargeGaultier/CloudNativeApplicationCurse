@@ -216,7 +216,25 @@ POSTGRES_DB=gym
 ### Conditions d'exécution du pipeline
 
 - Runner local requis (`runs-on: self-hosted`)
-- Secrets requis: `DOCKER_USERNAME`, `DOCKER_PASSWORD`, `SONAR_TOKEN`
+- Secrets requis: `DOCKER_USERNAME`, `DOCKER_PASSWORD`
+
+## 🔄 Déploiement local automatisé
+
+Le stage `deploy` relance automatiquement l'environnement après le push d'images.
+
+Workflow:
+
+```
+lint → build → tests → docker build/push → deploy
+```
+
+Le déploiement:
+- Arrête les conteneurs (`docker compose down`)
+- Pull les images GHCR taguées avec le SHA
+- Relance l'environnement (`docker compose up -d --no-build`)
+
+Branches:
+- Déploiement automatique uniquement sur `develop`
 
 ## Development
 

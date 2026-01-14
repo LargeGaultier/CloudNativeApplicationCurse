@@ -6,6 +6,11 @@ if [ -z "${DOCKER_USERNAME}" ] || [ -z "${GITHUB_SHA}" ]; then
   exit 1
 fi
 
+if [ -z "${POSTGRES_USER}" ] || [ -z "${POSTGRES_PASSWORD}" ] || [ -z "${POSTGRES_DB}" ]; then
+  echo "Missing POSTGRES_USER/POSTGRES_PASSWORD/POSTGRES_DB"
+  exit 1
+fi
+
 USERNAME_LOWER=$(echo "${DOCKER_USERNAME}" | tr '[:upper:]' '[:lower:]')
 IMAGE_BACKEND="ghcr.io/${USERNAME_LOWER}/cloudnative-backend:${GITHUB_SHA}"
 IMAGE_FRONTEND="ghcr.io/${USERNAME_LOWER}/cloudnative-frontend:${GITHUB_SHA}"

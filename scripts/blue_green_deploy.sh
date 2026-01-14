@@ -52,7 +52,7 @@ upstream frontend_active {
 }
 EOF
 
-docker exec reverse-proxy nginx -s reload
+docker compose -f docker-compose.base.yml exec -T reverse-proxy nginx -s reload
 
 echo "Checking backend health..."
 for i in 1 2 3 4 5; do
@@ -72,7 +72,7 @@ upstream frontend_active {
     server frontend-${CURRENT_COLOR}:80 resolve;
 }
 EOF
-      docker exec reverse-proxy nginx -s reload
+      docker compose -f docker-compose.base.yml exec -T reverse-proxy nginx -s reload
     fi
     exit 1
   fi
@@ -97,7 +97,7 @@ upstream frontend_active {
     server frontend-${CURRENT_COLOR}:80 resolve;
 }
 EOF
-      docker exec reverse-proxy nginx -s reload
+      docker compose -f docker-compose.base.yml exec -T reverse-proxy nginx -s reload
     fi
     exit 1
   fi

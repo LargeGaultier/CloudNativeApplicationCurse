@@ -442,13 +442,190 @@ Which executes:
 - GitHub Actions CI
 - SonarCloud
 
+
+## 🚀 Docker & Docker Compose
+
+This project is fully containerized and can be started with **a single command** using Docker Compose.
+
+### ✔ How to start the environment
+
+```bash
+docker compose up --build
+```
+
+To stop and clean everything:
+
+```bash
+docker compose down -v
+```
+
+### ✔ Accessible URLs
+
+- **Frontend**: http://localhost:8080  
+- **Backend**: http://localhost:3000  
+- **PostgreSQL**: local access only (via Docker network)
+
+### ✔ Docker Images (GHCR)
+
+- **Backend**: `ghcr.io/<username>/cloudnative-backend:latest`
+- **Frontend**: `ghcr.io/<username>/cloudnative-frontend:latest`
+
+> Images are built and pushed automatically by the CI pipeline.
+
+### ✔ CI Pipeline Execution Conditions
+
+- Requires a **self-hosted GitHub Actions runner**
+- Required secrets:
+  - `DOCKER_USERNAME`
+  - `DOCKER_PASSWORD`
+  - `SONAR_TOKEN`
+
+### ✔ CI Status Badge
+
+![CI](https://github.com/<username>/<repository>/actions/workflows/ci.yml/badge.svg)
+
+---
+
+## Features
+
+### User Features
+- **User Dashboard**: View stats, billing, and recent bookings
+- **Class Booking**: Book and cancel fitness classes
+- **Subscription Management**: View subscription details and billing
+- **Profile Management**: Update personal information
+
+### Admin Features
+- **Admin Dashboard**: Overview of gym statistics and revenue
+- **User Management**: CRUD operations for users
+- **Class Management**: Create, update, and delete fitness classes
+- **Booking Management**: View and manage all bookings
+- **Subscription Management**: Manage user subscriptions
+
+### Business Logic
+- **Capacity Management**
+- **Time Conflict Prevention**
+- **2-hour Cancellation Policy**
+- **Dynamic Billing System**
+- **Subscription Types**: Standard (€30), Premium (€50), Student (€20)
+
+---
+
+## Tech Stack
+
+### Backend
+- Node.js with Express
+- Prisma ORM + PostgreSQL
+- RESTful API
+
+### Frontend
+- Vue.js 3
+- Pinia
+- Vue Router
+
+### DevOps
+- Docker
+- Docker Compose
+- GitHub Actions
+- SonarCloud
+- Nginx
+
+---
+
+## Development Workflow & Code Quality
+
+- **main**: production branch
+- **develop**: integration branch
+- **feature/***: feature branches
+
+All changes go through Pull Requests with mandatory CI checks.
+
+### Commit Convention
+
+```
+<type>: <description>
+```
+
+Allowed types:
+- feat
+- fix
+- chore
+- docs
+- refactor
+- test
+
+---
+
+## CI Pipeline Overview
+
+```
+Pull Request / Push
+        ↓
+      Lint
+        ↓
+      Build
+        ↓
+      Tests
+        ↓
+   SonarCloud Scan
+        ↓
+   Quality Gate
+        ↓
+   Docker Build & Push
+```
+
 ---
 
 ## Summary
 
-This setup provides:
-- Automated quality checks
-- Secure collaboration workflow
-- CI-enforced code standards
-- A solid foundation for future CI/CD deployments
+This project delivers:
+- One-command Docker startup
+- Full CI/CD-ready architecture
+- Strong code quality enforcement
+- Production-grade DevOps setup
 
+
+## 🚀 Docker & Docker Compose (TP3)
+
+This project is fully containerized and can be started with **a single command** using Docker Compose.
+
+### ✔ How to start the environment via Docker Compose
+
+```bash
+docker compose up --build
+```
+
+(Optional) Stop and remove volumes:
+
+```bash
+docker compose down -v
+```
+
+### ✔ Accessible URLs
+
+- **Frontend**: http://localhost:8080  
+- **Backend**: http://localhost:3000  
+- **Postgres**: local only (internal Docker network)
+
+### ✔ Docker images (GHCR)
+
+- **Backend**: `ghcr.io/<username>/cloudnative-backend:latest`  
+- **Frontend**: `ghcr.io/<username>/cloudnative-frontend:latest`
+
+### ✔ CI pipeline execution conditions
+
+- Requires a **self-hosted runner**
+- Required secrets:
+  - `DOCKER_USERNAME`
+  - `DOCKER_PASSWORD`
+  - `SONAR_TOKEN`
+
+### ✔ CI Badge
+
+![CI](https://github.com/<username>/<repository>/actions/workflows/ci.yml/badge.svg)
+
+(Optional) Docker pulls badge can be added later if required.
+
+### Summary
+
+Dockerization (frontend + backend + postgres) allows the full stack to be started consistently with a single command (`docker compose up --build`).  
+Images are built and pushed automatically by the CI pipeline.

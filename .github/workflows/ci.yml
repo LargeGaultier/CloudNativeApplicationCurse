@@ -92,10 +92,6 @@ jobs:
       - lint
       - build
       - tests
-    env:
-      REGISTRY: ghcr.io
-      IMAGE_BACKEND: ghcr.io/${{ secrets.DOCKER_USERNAME }}/cloudnative-backend
-      IMAGE_FRONTEND: ghcr.io/${{ secrets.DOCKER_USERNAME }}/cloudnative-frontend
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -124,6 +120,13 @@ jobs:
         if: always()
         run: |
           docker rm -f backend-ci frontend-ci || true
+
+      - name: Prepare registry settings
+        run: |
+          USERNAME_LOWER=$(echo "${{ secrets.DOCKER_USERNAME }}" | tr '[:upper:]' '[:lower:]')
+          echo "REGISTRY=ghcr.io" >> "$GITHUB_ENV"
+          echo "IMAGE_BACKEND=ghcr.io/${USERNAME_LOWER}/cloudnative-backend" >> "$GITHUB_ENV"
+          echo "IMAGE_FRONTEND=ghcr.io/${USERNAME_LOWER}/cloudnative-frontend" >> "$GITHUB_ENV"
 
       - name: Login to registry
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ env.REGISTRY }} -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin

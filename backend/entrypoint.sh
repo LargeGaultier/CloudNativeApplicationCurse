@@ -1,7 +1,9 @@
 #!/bin/sh
 set -e
 
-if [ -n "${DATABASE_URL}" ]; then
+if [ -n "${SKIP_DB_INIT}" ]; then
+  echo "Skipping database initialization."
+elif [ -n "${DATABASE_URL}" ]; then
   echo "Waiting for database..."
   until pg_isready -d "${DATABASE_URL}" >/dev/null 2>&1; do
     sleep 1

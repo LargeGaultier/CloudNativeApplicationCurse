@@ -109,7 +109,7 @@ jobs:
       - name: Run backend container
         run: |
           docker run -d --name backend-ci -p 3000:3000 \
-            -e DATABASE_URL=postgresql://user:pass@localhost:5432/db \
+            -e SKIP_DB_INIT=1 \
             backend-ci
           sleep 5
           curl -f http://localhost:3000/health

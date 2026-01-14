@@ -157,8 +157,8 @@ jobs:
       - name: Login to registry
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ghcr.io -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Deploy via compose
-        run: ./scripts/deploy.sh
+      - name: Deploy blue/green
+        run: ./scripts/blue_green_deploy.sh
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           GITHUB_SHA: ${{ github.sha }}

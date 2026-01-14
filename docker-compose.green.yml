@@ -1,0 +1,23 @@
+services:
+  backend-green:
+    image: ${IMAGE_BACKEND_GREEN}
+    environment:
+      PORT: 3000
+      FRONTEND_URL: http://localhost
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app_net
+
+  frontend-green:
+    image: ${IMAGE_FRONTEND_GREEN}
+    depends_on:
+      - backend-green
+    networks:
+      - app_net
+
+networks:
+  app_net:
+    external: true

@@ -629,3 +629,77 @@ docker compose down -v
 
 Dockerization (frontend + backend + postgres) allows the full stack to be started consistently with a single command (`docker compose up --build`).  
 Images are built and pushed automatically by the CI pipeline.
+
+## 🔄 Automated Local Deployment
+
+This project includes an **automated local deployment stage** as part of its CI pipeline, executed through **GitHub Actions** on a **self-hosted runner**.
+
+The goal is to ensure that once valid Docker images are built and published, the application is **automatically restarted locally**, without manual intervention and **without losing PostgreSQL data**.
+
+---
+
+### How the deploy stage works
+
+The `deploy` job is triggered **automatically after a valid Docker image is published to the remote registry (GHCR)**.
+
+It executes the following steps:
+
+1. Stops the currently running Docker Compose stack **without removing volumes**
+2. Pulls the latest Docker images from **GHCR**, tagged with the current commit SHA
+3. Recreates the backend environment file required by Docker Compose
+4. Restarts the full application using Docker Compose
+
+All deployment logic is stored in a dedicated script:
+
+```bash
+scripts/deploy.sh
+```
+
+This ensures the deployment process is **clear, reproducible, and idempotent**.
+
+---
+
+### Deployment workflow overview
+
+The deployment stage is executed only after the Docker images have been successfully pushed.
+
+```
+lint → build → tests → docker build → push registry → deploy
+```
+
+---
+
+### Requirements
+
+To run the automated deployment, the following conditions must be met:
+
+- A **self-hosted GitHub Actions runner** running on the target machine
+- Docker and Docker Compose installed on the runner host
+- Access to a remote Docker registry (GitHub Container Registry)
+- The following GitHub secrets configured:
+  - POSTGRES_USER
+  - POSTGRES_PASSWORD
+  - POSTGRES_DB
+  - DATABASE_URL
+  - SONAR_TOKEN
+
+---
+
+### Active deployment branches
+
+For this coursework:
+
+- **Automated deployment is enabled only on the `develop` branch**
+- Pull Requests or pushes targeting other branches do not trigger the deploy stage
+
+---
+
+### Idempotency guarantees
+
+The deployment is designed to be **idempotent** and can be executed multiple times in a row:
+
+- No use of `docker compose down --volumes`
+- PostgreSQL volumes are preserved
+- Docker images are always pulled from the remote registry
+- Containers are cleanly restarted on each deployment
+

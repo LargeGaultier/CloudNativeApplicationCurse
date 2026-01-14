@@ -21,3 +21,29 @@ docker compose down
 docker pull "${IMAGE_BACKEND}"
 docker pull "${IMAGE_FRONTEND}"
 docker compose up -d --no-build
+
+echo "Checking backend health..."
+for i in 1 2 3 4 5; do
+  if curl -fsS http://localhost:3000/health >/dev/null; then
+    echo "Backend is up."
+    break
+  fi
+  if [ "$i" -eq 5 ]; then
+    echo "Backend healthcheck failed."
+    exit 1
+  fi
+  sleep 2
+done
+
+echo "Checking frontend..."
+for i in 1 2 3 4 5; do
+  if curl -fsS http://localhost:8080 >/dev/null; then
+    echo "Frontend is up."
+    break
+  fi
+  if [ "$i" -eq 5 ]; then
+    echo "Frontend check failed."
+    exit 1
+  fi
+  sleep 2
+done

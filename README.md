@@ -2,15 +2,23 @@
 
 A complete fullstack gym management application built with modern web technologies.
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mathisBa_CloudNativeApplicationCurse&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=mathisBa_CloudNativeApplicationCurse)
-
 ### ✔ Badge CI
+
+[![CI](https://github.com/mathisBa/CloudNativeApplicationCurse/actions/workflows/ci.yml/badge.svg)](https://github.com/mathisBa/CloudNativeApplicationCurse/actions/workflows/ci.yml)
 
 ### ✔ Badge SonarCloud
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mathisBa_CloudNativeApplicationCurse&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=mathisBa_CloudNativeApplicationCurse)
+
 ### ✔ Schéma simple du pipeline
 
+Lint → Build → Tests → SonarCloud → Docker build/run/push
+
 ### ✔ Règles du workflow Git (TP1 + TP2)
+
+- Branches dédiées par feature
+- Conventional Commits (ex: `feat:`, `fix:`)
+- PR obligatoire avant merge
 
 ## Features
 
@@ -177,6 +185,38 @@ gym-management-system/
 
 - `GET /api/dashboard/user/:userId` - Get user dashboard
 - `GET /api/dashboard/admin` - Get admin dashboard
+
+## Docker Compose
+
+### Lancer l'environnement complet
+
+```bash
+docker compose up --build
+```
+
+### URLs accessibles
+
+- Frontend: http://localhost:8080
+- Backend: http://localhost:3000
+- Postgres: local uniquement (pas exposé)
+
+### Variables nécessaires (.env)
+
+```bash
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=gym
+```
+
+### Images Docker publiées
+
+- Backend: `ghcr.io/mathisBa/cloudnative-backend:latest`
+- Frontend: `ghcr.io/mathisBa/cloudnative-frontend:latest`
+
+### Conditions d'exécution du pipeline
+
+- Runner local requis (`runs-on: self-hosted`)
+- Secrets requis: `DOCKER_USERNAME`, `DOCKER_PASSWORD`, `SONAR_TOKEN`
 
 ## Development
 

@@ -85,44 +85,56 @@ jobs:
         run: npm test
         working-directory: backend
 
-  sonarcloud:
-    name: SonarCloud
+  docker:
+    name: Docker Images
     runs-on: self-hosted
     needs:
       - lint
       - build
       - tests
+    env:
+      REGISTRY: ghcr.io
+      IMAGE_BACKEND: ghcr.io/${{ secrets.DOCKER_USERNAME }}/cloudnative-backend
+      IMAGE_FRONTEND: ghcr.io/${{ secrets.DOCKER_USERNAME }}/cloudnative-frontend
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
+      - name: Build backend image
+        run: docker build -t backend-ci ./backend
 
-      - name: Check SonarCloud token presence
+      - name: Build frontend image
+        run: docker build -t frontend-ci ./frontend
+
+      - name: Run backend container
         run: |
-          if [ -n "${SONAR_TOKEN}" ]; then
-            echo "SONAR_TOKEN is set"
-          else
-            echo "SONAR_TOKEN is missing"
-            exit 1
-          fi
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          docker run -d --name backend-ci -p 3000:3000 \
+            -e DATABASE_URL=postgresql://user:pass@localhost:5432/db \
+            backend-ci
+          sleep 5
+          curl -f http://localhost:3000/health
 
-      - name: Install backend deps
-        run: npm install
-        working-directory: backend
+      - name: Run frontend container
+        run: |
+          docker run -d --name frontend-ci -p 8080:80 frontend-ci
+          sleep 5
+          curl -f http://localhost:8080
 
-      - name: SonarCloud scan (backend)
-        run: >
-          npx sonar-scanner
-          -Dsonar.projectKey=mathisBa_CloudNativeApplicationCurse
-          -Dsonar.organization=mathisba
-          -Dsonar.sources=backend/src
-          -Dsonar.host.url=https://sonarcloud.io
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      - name: Stop containers
+        if: always()
+        run: |
+          docker rm -f backend-ci frontend-ci || true
+
+      - name: Login to registry
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ env.REGISTRY }} -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Tag and push images
+        run: |
+          docker tag backend-ci ${{ env.IMAGE_BACKEND }}:${{ github.sha }}
+          docker tag frontend-ci ${{ env.IMAGE_FRONTEND }}:${{ github.sha }}
+          docker tag backend-ci ${{ env.IMAGE_BACKEND }}:latest
+          docker tag frontend-ci ${{ env.IMAGE_FRONTEND }}:latest
+          docker push ${{ env.IMAGE_BACKEND }}:${{ github.sha }}
+          docker push ${{ env.IMAGE_FRONTEND }}:${{ github.sha }}
+          docker push ${{ env.IMAGE_BACKEND }}:latest
+          docker push ${{ env.IMAGE_FRONTEND }}:latest

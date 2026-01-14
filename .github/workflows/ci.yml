@@ -217,3 +217,27 @@ jobs:
       - name: Cleanup deploy
         if: always()
         run: rm -f backend/.env
+  deploy_blue_green:
+    name: Deploy Blue/Green (local runner)
+    runs-on: self-hosted
+    needs: docker
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login GHCR
+        run: |
+          OWNER_LC=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "$OWNER_LC" --password-stdin
+
+      - name: Run blue/green deployment script
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          GHCR_OWNER: ${{ github.repository_owner }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          export GHCR_OWNER="$(echo "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
+          chmod +x scripts/deploy-blue-green.sh
+          ./scripts/deploy-blue-green.sh

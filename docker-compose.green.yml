@@ -1,8 +1,6 @@
 services:
   app-back-green:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: ghcr.io/${GHCR_OWNER}/cloudnative-backend:${IMAGE_TAG}
     container_name: app-back-green
     restart: unless-stopped
     env_file:

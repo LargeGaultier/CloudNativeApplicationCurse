@@ -22,6 +22,7 @@ ENV PORT=3000
 
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/src ./src
+COPY --from=build /app/seed ./seed
 COPY --from=build /app/package*.json ./
 COPY --from=build /app/src/prisma ./src/prisma
 COPY entrypoint.sh /entrypoint.sh

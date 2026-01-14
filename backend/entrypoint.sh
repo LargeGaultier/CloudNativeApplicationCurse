@@ -12,6 +12,8 @@ elif [ -n "${DATABASE_URL}" ]; then
   echo "Initializing database schema..."
   npx prisma migrate deploy --schema=src/prisma/schema.prisma || true
   npx prisma db push --schema=src/prisma/schema.prisma
+  echo "Seeding database..."
+  npm run seed
 fi
 
 exec node src/index.js

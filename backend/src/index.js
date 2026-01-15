@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const client = require('prom-client');
 const promBundle = require('express-prom-bundle');
+const expressWinston = require('express-winston');
+const winston = require('winston');
 require('dotenv').config();
 
 const userRoutes = require('./routes/userRoutes');
@@ -32,6 +34,20 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(expressWinston.logger({
+  transports: [
+    new winston.transports.Console()
+  ],
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  meta: true,
+  msg: 'HTTP {{req.method}} {{req.url}}',
+  expressFormat: false,
+  colorize: false
+}));
 app.use(metricsMiddleware);
 
 // Routes

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const client = require('prom-client');
+const promBundle = require('express-prom-bundle');
 require('dotenv').config();
 
 const userRoutes = require('./routes/userRoutes');
@@ -15,6 +16,14 @@ const PORT = process.env.PORT || 3000;
 const register = client.register;
 
 client.collectDefaultMetrics();
+const metricsMiddleware = promBundle({
+  includeMethod: true,
+  includePath: true,
+  includeStatusCode: true,
+  promClient: {
+    collectDefaultMetrics: false
+  }
+});
 
 // Middleware
 app.use(cors({
@@ -23,6 +32,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(metricsMiddleware);
 
 // Routes
 app.use('/api/users', userRoutes);

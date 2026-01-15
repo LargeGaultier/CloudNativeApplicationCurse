@@ -16,6 +16,16 @@ const authRoutes = require('./routes/authRoutes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const register = client.register;
+const logger = winston.createLogger({
+  level: 'info',
+  transports: [
+    new winston.transports.Console()
+  ],
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  )
+});
 
 client.collectDefaultMetrics();
 const metricsMiddleware = promBundle({
@@ -77,6 +87,18 @@ app.get('/metrics', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Failed to collect metrics' });
   }
+});
+app.get('/api/logs/info', (req, res) => {
+  logger.info('Info log test', { route: req.path });
+  res.json({ status: 'logged', level: 'info' });
+});
+app.get('/api/logs/warn', (req, res) => {
+  logger.warn('Warn log test', { route: req.path });
+  res.json({ status: 'logged', level: 'warn' });
+});
+app.get('/api/logs/error', (req, res) => {
+  logger.error('Error log test', { route: req.path });
+  res.json({ status: 'logged', level: 'error' });
 });
 
 // Error handling middleware

@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const client = require('prom-client');
 require('dotenv').config();
 
 const userRoutes = require('./routes/userRoutes');
@@ -11,6 +12,9 @@ const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const register = client.register;
+
+client.collectDefaultMetrics();
 
 // Middleware
 app.use(cors({
@@ -39,6 +43,14 @@ app.get('/health', (req, res) => {
 });
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+app.get('/metrics', async (req, res) => {
+  try {
+    res.set('Content-Type', register.contentType);
+    res.end(await register.metrics());
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to collect metrics' });
+  }
 });
 
 // Error handling middleware

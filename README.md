@@ -198,6 +198,24 @@ docker compose up --build
 
 - Frontend: http://localhost:8080
 - Backend: http://localhost:3000
+
+## Monitoring (TP6)
+
+### Lancer la stack monitoring
+
+```bash
+docker compose -f docker-compose.monitoring.yml up -d
+```
+
+### Services
+
+- Grafana: http://localhost:3000
+- Prometheus: http://localhost:9090
+- Loki: http://localhost:3100 (interne)
+
+### Metriques
+
+- Backend metrics: http://localhost/metrics
 - Postgres: local uniquement (pas exposé)
 
 ### Variables nécessaires (.env)

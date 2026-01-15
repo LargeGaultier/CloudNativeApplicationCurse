@@ -165,3 +165,20 @@ jobs:
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+
+      - name: Ensure monitoring is running
+        run: |
+          required="grafana loki prometheus promtail"
+          running="$(docker compose -f docker-compose.monitoring.yml ps --services --filter status=running || true)"
+          missing=""
+          for svc in $required; do
+            if ! echo "$running" | grep -q "^${svc}$"; then
+              missing="$missing $svc"
+            fi
+          done
+          if [ -n "$missing" ]; then
+            echo "Starting monitoring services:$missing"
+            docker compose -f docker-compose.monitoring.yml up -d
+          else
+            echo "Monitoring already running."
+          fi
